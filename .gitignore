@@ -1,5 +1,5 @@
 node_modules
-*.log
+*.log.*
 explorations
 TODOs.md
 dist/*.gz

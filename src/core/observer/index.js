@@ -1,10 +1,7 @@
-
-function isObject (obj) {
-  return obj !== null && typeof obj === 'object'
-}
+import _ from 'lodash'
 
 export function observe (value, asRootData) {
-  if (!isObject(value)) {
+  if (!_.isObject(value)) {
     return
   }
 }
