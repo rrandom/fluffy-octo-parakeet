@@ -1,18 +1,18 @@
-var path = require('path');
+var path = require('path')
 var webpack = require('webpack')
 
 var webpackConfig = {
   resolve: {
     alias: {
-      vue: path.resolve(__dirname, '../src/entries/web-runtime-with-compiler'),
-      compiler: path.resolve(__dirname, '../src/compiler'),
-      core: path.resolve(__dirname, '../src/core'),
-      shared: path.resolve(__dirname, '../src/shared'),
-      web: path.resolve(__dirname, '../src/platforms/web'),
-      weex: path.resolve(__dirname, '../src/platforms/weex'),
-      server: path.resolve(__dirname, '../src/server'),
-      entries: path.resolve(__dirname, '../src/entries'),
-      sfc: path.resolve(__dirname, '../src/sfc')
+      vue: path.resolve(__dirname, './src/entries/web-runtime-with-compiler'),
+      compiler: path.resolve(__dirname, './src/compiler'),
+      core: path.resolve(__dirname, './src/core'),
+      shared: path.resolve(__dirname, './src/shared'),
+      web: path.resolve(__dirname, './src/platforms/web'),
+      weex: path.resolve(__dirname, './src/platforms/weex'),
+      server: path.resolve(__dirname, './src/server'),
+      entries: path.resolve(__dirname, './src/entries'),
+      sfc: path.resolve(__dirname, './src/sfc')
     }
   },
   module: {
@@ -26,14 +26,11 @@ var webpackConfig = {
     __WEEX__: false,
     'process.env': {
       NODE_ENV: '"development"',
-      TRANSITION_DURATION: process.env.SAUCE ?
-        500 :
-        50,
-      TRANSITION_BUFFER: process.env.SAUCE ?
-        50 :
-        10
+      TRANSITION_DURATION: process.env.SAUCE ? 500 : 50,
+      TRANSITION_BUFFER: process.env.SAUCE ? 50 : 10
     }
   })],
+  watch: true,
   devtool: '#inline-source-map'
 }
 
@@ -41,15 +38,15 @@ var webpackConfig = {
 module.exports = function (config) {
   config.set({
     frameworks: ['jasmine'],
-    files: ['../test/unit/index.js'],
+    files: ['./test/index.js'],
     preprocessors: {
-      '../test/unit/index.js': ['webpack', 'sourcemap']
+      './test/index.js': ['webpack', 'sourcemap']
     },
     webpack: webpackConfig,
     webpackMiddleware: {
       noInfo: true
-    }, 
+    },
     browsers: ['PhantomJS'],
-    reporters: ['progress'],
+    reporters: ['progress']
   })
 }
