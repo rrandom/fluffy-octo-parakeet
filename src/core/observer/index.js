@@ -21,7 +21,8 @@ export function observe (value) {
   if (Object.prototype.hasOwnProperty.call(value, '__ob__') &&
   value.__ob__ instanceof Observer) {
     ob = value.__ob__
-  } else if (_.isPlainObject(value) && Object.isExtensible(value)) {
+  } else if ((_.isArray(value) || _.isPlainObject(value)) &&
+  Object.isExtensible(value)) {
     ob = new Observer(value)
   }
   return ob

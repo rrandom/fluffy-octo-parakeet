@@ -131,4 +131,15 @@ describe('Observer', () => {
     expect(ob1.value).toBe(obj)
     expect(obj.__ob__).toBe(ob1)
   })
+
+  it('create on array', () => {
+    const arr = [{}, {}]
+    const ob1 = observe(arr)
+    expect(ob1 instanceof Observer).toBe(true)
+    expect(ob1.value).toBe(arr)
+    expect(arr.__ob__).toBe(ob1)
+
+    // expect(arr[0].__ob__ instanceof Observer).toBe(true)
+    // expect(arr[1].__ob__ instanceof Observer).toBe(true)
+  })
 })
