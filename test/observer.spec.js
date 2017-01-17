@@ -23,4 +23,17 @@ describe('Observer', () => {
     const ob2 = observe(obj)
     expect(ob2).toBe(ob1)
   })
+
+  it('create on null', () => {
+    const obj = Object.create(null)
+    obj.a = {}
+    obj.b = {}
+    const ob1 = observe(obj)
+    expect(ob1 instanceof Observer).toBe(true)
+    expect(ob1.value).toBe(obj)
+    expect(obj.__ob__).toBe(ob1)
+
+    const ob2 = observe(obj)
+    expect(ob2).toBe(ob1)
+  })
 })
