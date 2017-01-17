@@ -70,4 +70,65 @@ describe('Observer', () => {
     expect(val).toBe(10)
     console.log(obj.a)
   })
+
+  it('create on property with only getter', () => {
+    const obj = {}
+    Object.defineProperty(obj, 'a', {
+      configurable: true,
+      enumerable: true,
+      get () { return 123 }
+    })
+
+    const ob1 = observe(obj)
+    expect(ob1 instanceof Observer).toBe(true)
+    expect(ob1.value).toBe(obj)
+    expect(obj.__ob__).toBe(ob1)
+
+    expect(obj.a).toBe(123)
+
+    const ob2 = observe(obj)
+    expect(ob2).toBe(ob1)
+
+    try {
+      obj.a = 101
+    } catch (e) {}
+    expect(obj.a).toBe(123)
+  })
+
+  it('create on property with only setter', () => {
+    const obj = {}
+    let val = 10
+    Object.defineProperty(obj, 'a', { // eslint-disable-line accessor-pairs
+      configurable: true,
+      enumerable: true,
+      set (v) { val = v }
+    })
+
+    const ob1 = observe(obj)
+    expect(ob1 instanceof Observer).toBe(true)
+    expect(ob1.value).toBe(obj)
+    expect(obj.__ob__).toBe(ob1)
+
+    expect(obj.a).toBe(undefined)
+
+    const ob2 = observe(obj)
+    expect(ob2).toBe(ob1)
+
+    obj.a = 100
+    expect(val).toBe(100)
+  })
+
+  it('create on property which is marked not configurable', () => {
+    const obj = {}
+    Object.defineProperty(obj, 'a', {
+      configurable: false,
+      enumerable: true,
+      val: 10
+    })
+
+    const ob1 = observe(obj)
+    expect(ob1 instanceof Observer).toBe(true)
+    expect(ob1.value).toBe(obj)
+    expect(obj.__ob__).toBe(ob1)
+  })
 })
