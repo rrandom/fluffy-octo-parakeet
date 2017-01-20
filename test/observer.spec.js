@@ -186,4 +186,36 @@ describe('Observer', () => {
     obj.c = NaN
     expect(watcher.update.calls.count()).toBe(3)
   })
+
+  it('observing object prop change on defined property', () => {
+    const obj = { val: 2 }
+    Object.defineProperty(obj, 'a', {
+      configurable: true,
+      enumerable: true,
+      get () { return this.val },
+      set (v) {
+        this.val = v
+        return this.val
+      }
+    })
+
+    observe(obj)
+    // mock a watcher!
+    const watcher = {
+      deps: [],
+      addDep: function (dep) {
+        this.deps.push(dep)
+        dep.addSub(this)
+      },
+      update: jasmine.createSpy()
+    }
+    // collect dep
+    Dep.target = watcher
+    expect(obj.a).toBe(2) // Make sure 'this' is preserved
+    Dep.target = null
+    obj.a = 3
+    expect(obj.val).toBe(3) // make sure 'setter' was called
+    obj.val = 5
+    expect(obj.a).toBe(5) // make sure 'getter' was called
+  })
 })
