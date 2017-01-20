@@ -1,5 +1,6 @@
 
 import { Observer, observe } from 'core/observer/index'
+import Dep from 'core/observer/dep'
 
 describe('Observer', () => {
   it('create on non-observables', () => {
@@ -147,5 +148,42 @@ describe('Observer', () => {
 
     expect(arr[0].__ob__ instanceof Observer).toBe(true)
     expect(arr[1].__ob__ instanceof Observer).toBe(true)
+  })
+
+  it('observing object prop change', () => {
+    const obj = { a: { b: 2 }, c: NaN }
+    observe(obj)
+
+    const watcher = {
+      deps: [],
+      addDep (dep) {
+        this.deps.push(dep)
+        dep.addSub(this)
+      },
+      update: jasmine.createSpy()
+    }
+
+    Dep.target = watcher
+    obj.a.b
+    Dep.target = null
+    expect(watcher.deps.length).toBe(3) // obj.a + a + a.b
+    obj.a.b = 3
+    expect(watcher.update.calls.count()).toBe(1)
+
+    obj.a = { b: 4 }
+    expect(watcher.update.calls.count()).toBe(2)
+    watcher.deps = []
+
+    Dep.target = watcher
+    obj.a.b
+    obj.c
+    Dep.target = null
+    expect(watcher.deps.length).toBe(4)
+
+    obj.a.b = 5
+    expect(watcher.update.calls.count()).toBe(3)
+
+    obj.c = NaN
+    expect(watcher.update.calls.count()).toBe(3)
   })
 })
