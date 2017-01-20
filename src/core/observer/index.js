@@ -10,7 +10,26 @@ export class Observer {
       writable: true,
       configurable: true
     })
+    if (_.isArray(value)) {
+      this.observeArray(value)
+    } else {
+      this.walk(value)
+    }
   }
+
+  walk (obj) {
+    const keys = Object.keys(obj)
+    for (let i = 0; i < keys.length; i++) {
+      observe(obj[keys[i]])
+    }
+  }
+
+  observeArray (items) {
+    for (let i = 0, l = items.length; i < l; i++) {
+      observe(items[i])
+    }
+  }
+
 }
 
 export function observe (value) {
@@ -27,3 +46,4 @@ export function observe (value) {
   }
   return ob
 }
+

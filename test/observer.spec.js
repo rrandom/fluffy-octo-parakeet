@@ -20,6 +20,9 @@ describe('Observer', () => {
     expect(ob1.value).toBe(obj)
     expect(obj.__ob__).toBe(ob1)
 
+    expect(obj.a.__ob__ instanceof Observer).toBe(true)
+    expect(obj.b.__ob__ instanceof Observer).toBe(true)
+
     const ob2 = observe(obj)
     expect(ob2).toBe(ob1)
   })
@@ -32,6 +35,9 @@ describe('Observer', () => {
     expect(ob1 instanceof Observer).toBe(true)
     expect(ob1.value).toBe(obj)
     expect(obj.__ob__).toBe(ob1)
+
+    expect(obj.a.__ob__ instanceof Observer).toBe(true)
+    expect(obj.b.__ob__ instanceof Observer).toBe(true)
 
     const ob2 = observe(obj)
     expect(ob2).toBe(ob1)
@@ -138,5 +144,8 @@ describe('Observer', () => {
     expect(ob1 instanceof Observer).toBe(true)
     expect(ob1.value).toBe(arr)
     expect(arr.__ob__).toBe(ob1)
+
+    expect(arr[0].__ob__ instanceof Observer).toBe(true)
+    expect(arr[1].__ob__ instanceof Observer).toBe(true)
   })
 })
