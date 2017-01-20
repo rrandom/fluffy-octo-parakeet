@@ -80,9 +80,11 @@ export function defineReactive (obj, key, val) {
     set: function reactiveSetter (newVal) {
       const value = getter ? getter.call(obj) : val
 
-      if (newVal === value) {
+      /* eslint-disable no-self-compare */
+      if (newVal === value || (newVal !== newVal && value !== value)) {
         return
       }
+      /* eslint-disable no-self-compare */
 
       if (setter) {
         setter.call(obj, newVal)
