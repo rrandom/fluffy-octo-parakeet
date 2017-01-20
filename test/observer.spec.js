@@ -75,7 +75,6 @@ describe('Observer', () => {
 
     obj.a = 10
     expect(val).toBe(10)
-    console.log(obj.a)
   })
 
   it('create on property with only getter', () => {
@@ -167,13 +166,14 @@ describe('Observer', () => {
     obj.a.b
     Dep.target = null
     expect(watcher.deps.length).toBe(3) // obj.a + a + a.b
+
     obj.a.b = 3
     expect(watcher.update.calls.count()).toBe(1)
 
     obj.a = { b: 4 }
     expect(watcher.update.calls.count()).toBe(2)
-    watcher.deps = []
 
+    watcher.deps = []
     Dep.target = watcher
     obj.a.b
     obj.c
