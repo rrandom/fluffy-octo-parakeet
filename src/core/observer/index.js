@@ -97,6 +97,14 @@ export function defineReactive (obj, key, val) {
   })
 }
 
-export function set (obj, key, val) {}
+export function set (obj, key, val) {
+  if (hasOwn(obj, key)) {
+    obj[key] = val
+    return
+  }
+  const ob = obj.__ob__
+  defineReactive(ob.value, key, val)
+  ob.dep.notify()
+}
 
-export function del (obj , key) {}
+export function del (obj, key) {}
