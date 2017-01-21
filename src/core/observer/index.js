@@ -107,4 +107,6 @@ export function set (obj, key, val) {
   ob.dep.notify()
 }
 
-export function del (obj, key) {}
+export function del (obj, key) {
+  delete obj[key]
+}

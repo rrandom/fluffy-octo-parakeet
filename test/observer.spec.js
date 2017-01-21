@@ -251,13 +251,13 @@ describe('Observer', () => {
     expect(dep1.notify.calls.count()).toBe(1)
   })
 
- /*
   it('del obj prop works', () => {
     const obj2 = { a: 1 }
     delProp(obj2, 'a')
     expect(hasOwn(obj2, 'a')).toBe(false)
   })
 
+/*
   it('observing del on existing prop', () => {
     const obj1 = { a: 1 }
     const ob1 = observe(obj1)
