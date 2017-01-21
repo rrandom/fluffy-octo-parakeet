@@ -97,3 +97,6 @@ export function defineReactive (obj, key, val) {
   })
 }
 
+export function set (obj, key, val) {}
+
+export function del (obj , key) {}

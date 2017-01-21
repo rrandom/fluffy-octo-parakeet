@@ -1,6 +1,12 @@
 
-import { Observer, observe } from 'core/observer/index'
+import {
+  Observer,
+   observe,
+  set as setProp,
+  del as delProp
+} from 'core/observer/index'
 import Dep from 'core/observer/dep'
+import { hasOwn } from 'core/util/index'
 
 describe('Observer', () => {
   it('create on non-observables', () => {
@@ -217,5 +223,76 @@ describe('Observer', () => {
     expect(obj.val).toBe(3) // make sure 'setter' was called
     obj.val = 5
     expect(obj.a).toBe(5) // make sure 'getter' was called
+  })
+
+  it('observing set on non-existing prop', () => {
+    const obj1 = { a: 1 }
+    const ob1 = observe(obj1)
+    const dep1 = ob1.dep
+
+    spyOn(dep1, 'notify')
+    setProp(obj1, 'b', 2)
+    expect(obj1.b).toBe(2)
+    expect(dep1.notify.calls.count()).toBe(1)
+  })
+
+  it('not observing set on existing prop', () => {
+    const obj1 = { a: 1 }
+    const ob1 = observe(obj1)
+    const dep1 = ob1.dep
+
+    spyOn(dep1, 'notify')
+    setProp(obj1, 'b', 2)
+    expect(obj1.b).toBe(2)
+    expect(dep1.notify.calls.count()).toBe(1)
+
+    setProp(obj1, 'b', 3)
+    expect(obj1.b).toBe(3)
+    expect(dep1.notify.calls.count()).toBe(2)
+  })
+
+  it('del obj prop works', () => {
+    const obj2 = { a: 1 }
+    delProp(obj2, 'a')
+    expect(hasOwn(obj2, 'a')).toBe(false)
+  })
+
+  it('observing del on existing prop', () => {
+    const obj1 = { a: 1 }
+    const ob1 = observe(obj1)
+    const dep1 = ob1.dep
+
+    delProp(obj1, 'a')
+    expect(hasOwn(obj1, 'a')).toBe(false)
+    expect(dep1.notify.calls.count()).toBe(1)
+  })
+
+  it('not observing del non-existing prop', () => {
+    const obj1 = { a: 1 }
+    const ob1 = observe(obj1)
+    const dep1 = ob1.dep
+
+    delProp(obj1, 'a')
+    expect(hasOwn(obj1, 'a')).toBe(false)
+    expect(dep1.notify.calls.count()).toBe(1)
+
+    delProp(obj1, 'a')
+    expect(dep1.notify.calls.count()).toBe(1)
+  })
+
+  it('obsering set/del works on Object.create(null)', () => {
+    const obj3 = Object.create(null)
+    obj3.a = 1
+    const ob3 = observe(obj3)
+    const dep3 = ob3.dep
+
+    spyOn(dep3, 'notify')
+    setProp(obj3, 'b', 2)
+    expect(obj3.b).toBe(2)
+    expect(dep3.notify.calls.count()).toBe(1)
+
+    delProp(obj3, 'a')
+    expect(hasOwn(obj3, 'a')).toBe(false)
+    expect(dep3.notify.calls.count()).toBe(2)
   })
 })
