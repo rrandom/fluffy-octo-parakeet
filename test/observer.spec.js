@@ -297,4 +297,24 @@ describe('Observer', () => {
     expect(hasOwn(obj3, 'a')).toBe(false)
     expect(dep3.notify.calls.count()).toBe(2)
   })
+
+  it('observing array mutation', () => {
+    const arr = []
+    const ob = observe(arr)
+    const dep = ob.dep
+    spyOn(dep, 'notify')
+    const objs = [{}, {}, {}]
+    arr.push(objs[0])
+    arr.pop()
+    arr.unshift(objs[1])
+    arr.shift()
+    arr.splice(0, 0, objs[2])
+    arr.sort()
+    arr.reverse()
+    expect(dep.notify.calls.count()).toBe(7)
+    // inserted elements should be observed
+    objs.forEach(obj => {
+      expect(obj.__ob__ instanceof Observer).toBe(true)
+    })
+  })
 })
