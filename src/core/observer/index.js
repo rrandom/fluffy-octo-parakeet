@@ -108,5 +108,13 @@ export function set (obj, key, val) {
 }
 
 export function del (obj, key) {
+  if (!hasOwn(obj, key)) {
+    return
+  }
   delete obj[key]
+  const ob = obj.__ob__
+  if (!ob) {
+    return
+  }
+  ob.dep.notify()
 }

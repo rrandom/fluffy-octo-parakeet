@@ -257,12 +257,12 @@ describe('Observer', () => {
     expect(hasOwn(obj2, 'a')).toBe(false)
   })
 
-/*
   it('observing del on existing prop', () => {
     const obj1 = { a: 1 }
     const ob1 = observe(obj1)
     const dep1 = ob1.dep
 
+    spyOn(dep1, 'notify')
     delProp(obj1, 'a')
     expect(hasOwn(obj1, 'a')).toBe(false)
     expect(dep1.notify.calls.count()).toBe(1)
@@ -273,6 +273,7 @@ describe('Observer', () => {
     const ob1 = observe(obj1)
     const dep1 = ob1.dep
 
+    spyOn(dep1, 'notify')
     delProp(obj1, 'a')
     expect(hasOwn(obj1, 'a')).toBe(false)
     expect(dep1.notify.calls.count()).toBe(1)
@@ -296,5 +297,4 @@ describe('Observer', () => {
     expect(hasOwn(obj3, 'a')).toBe(false)
     expect(dep3.notify.calls.count()).toBe(2)
   })
-  */
 })
