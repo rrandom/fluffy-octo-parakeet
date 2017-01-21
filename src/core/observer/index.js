@@ -1,6 +1,7 @@
 import _ from 'lodash'
 
 import Dep from './dep'
+import { hasOwn } from '../util/index'
 
 export class Observer {
 
@@ -40,7 +41,7 @@ export function observe (value) {
     return
   }
   let ob
-  if (Object.prototype.hasOwnProperty.call(value, '__ob__') &&
+  if (hasOwn(value, '__ob__') &&
   value.__ob__ instanceof Observer) {
     ob = value.__ob__
   } else if ((_.isArray(value) || _.isPlainObject(value)) &&
@@ -69,7 +70,6 @@ export function defineReactive (obj, key, val) {
     get: function reactiveGetter () {
       const value = getter ? getter.call(obj) : val
       if (Dep.target) {
-        console.log(key)
         dep.depend()
         if (childOb) {
           childOb.dep.depend()
